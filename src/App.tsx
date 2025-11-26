@@ -6,12 +6,17 @@ import { Book, Tag } from "./types";
 
 function App() {
 
+  type SortOption = 'none' | 'title-asc' | 'title-desc' | 'rating-asc' | 'rating-desc';
+
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
   const [minRating, setMinRating] = useState(0)
+  const [sortOption, setSortOption] = useState<SortOption>('none');
+  const [favorites, setFavorites] = useState<string[]>([])
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState<boolean>(false);
 
   useEffect(() => {
     setLoading(true);
@@ -50,9 +55,41 @@ function App() {
     const searchRes = titleRes || authorRes
     const matchesTag = selectedTag === null || book.tags.includes(selectedTag);
     const matchesRating = book.rating >= minRating;
+    const matchesFavorites = !showFavoritesOnly || favorites.includes(book.id);
 
-    return searchRes && matchesTag && matchesRating;
+    return searchRes && matchesTag && matchesRating && matchesFavorites;
   })
+
+  // Sorting - making a copy of filteredBooks in order to not change the original array
+  // and then sorting based on the selected sort option
+  const sortedBooks = [...filteredBooks].sort((a, b) => {
+    switch (sortOption) {
+      case 'title-asc':
+        return a.title.localeCompare(b.title);
+      case 'title-desc':
+        return b.title.localeCompare(a.title);
+      case 'rating-asc':
+        return a.rating - b.rating;
+      case 'rating-desc':
+        return b.rating - a.rating;
+      case 'none':
+      default:
+        return 0;
+    }
+
+  });
+
+  const toggleFavorite = (bookId: string) => {
+    setFavorites((prev) => {
+      if (prev.includes(bookId)) {
+        return prev.filter((id) => id !== bookId)
+      } else {
+        return [...prev, bookId
+
+        ]
+      }
+    })
+  }
 
   return (
     <div>
@@ -86,10 +123,43 @@ function App() {
               setMinRating(value);
             }}></input>
         </div>
+        <div style={{ marginTop: '10px' }}>
+          <label htmlFor='sort'>Sort by: </label>
+          <select id='sort' value={sortOption} onChange={(event) => {
+            setSortOption(event.target.value as SortOption)
+          }}
+          >
+            <option value='none'>None</option>
+            <option value='title-asc'>Title (A-Z)</option>
+            <option value='title-desc'>Title (Z-A)</option>
+            <option value='rating-asc'>Rating (Low to High)</option>
+            <option value='rating-desc'>Rating (High to Low)</option>
+          </select>
+        </div>
+        <div style={{ marginTop: '10px' }}>
+          <label>
+            <input type="checkbox" id="favoritesOnly" checked={showFavoritesOnly} onChange={(event) => {
+              setShowFavoritesOnly(event.target.checked);
+            }} />
+            {" "}
+            show Favorites only
+          </label>
+        </div>
+        <div style={{ marginTop: '10px' }}>
+          <button onClick={() => {
+            setSearchTerm("");
+            setSelectedTag(null);
+            setMinRating(0);
+            setSortOption('none');
+          }}> Clear </button>
+        </div>
       </div>
       <ul>
-        {filteredBooks.map((book) => (
+        {sortedBooks.map((book) => (
           <li key={book.id}>
+            <button type="button" onClick={() => toggleFavorite(book.id)}>
+              {favorites.includes(book.id) ? "★" : "☆"}
+            </button>{' '}
             <strong>{book.title}</strong> - {book.author}
           </li>
         ))}
