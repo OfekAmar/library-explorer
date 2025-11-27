@@ -15,8 +15,23 @@ function App() {
   const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
   const [minRating, setMinRating] = useState(0)
   const [sortOption, setSortOption] = useState<SortOption>('none');
-  const [favorites, setFavorites] = useState<string[]>([])
   const [showFavoritesOnly, setShowFavoritesOnly] = useState<boolean>(false);
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    const stored = localStorage.getItem("favorites");
+    if (!stored) return [];
+
+    try {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed)) {
+        return parsed as string[];
+      }
+      return [];
+    } catch {
+      return [];
+    }
+  });
+
+
 
   useEffect(() => {
     setLoading(true);
@@ -39,6 +54,10 @@ function App() {
       });
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+    console.log("כתיבה ל-localStorage:", favorites);
+  }, [favorites]);
 
   if (loading) {
     return <p>Loading...</p>;
