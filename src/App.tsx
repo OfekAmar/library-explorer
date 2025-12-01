@@ -8,6 +8,7 @@ import { SortSelection } from './components/SortSelection';
 import { FavoritesToggle } from './components/FavoritesToggle';
 import { ResetFilters } from './components/ResetFilters';
 import { BooksList } from './components/BooksList';
+import logo from "./assets/images/logo.png";
 
 function App() {
 
@@ -109,25 +110,33 @@ function App() {
   if (error) {
     return <p style={{ color: 'red' }}> Error : {error}  </p>;
   }
-  
+
   return (
-    <div>
-      <h1>  Library Explorer </h1>
-      <div>
+    <div className='app'>
+      <header className="app-header">
+        {/*The logo was created by me for previous collage project and internal use*/}
+        <img src={logo} alt="Bookify logo" className="app-logo" />
+      </header>
+      <div className="search-section">
         <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
-        <TagFilter selectedTag={selectedTag} onTagChange={setSelectedTag} />
-        <RatingFilter minRating={minRating} onRatingChange={setMinRating} />
-        <SortSelection sortOption={sortOption} onSortChange={setSortOption} />
-        <FavoritesToggle checked={showFavoritesOnly} onChange={setShowFavoritesOnly} />
-        <ResetFilters onReset={() => {
-          setSearchTerm("");
-          setSelectedTag(null);
-          setMinRating(0);
-          setSortOption("none");
-        }} />
+      </div>
+      <div className='filters-section'>
+        <div className='controls'>
+          <TagFilter selectedTag={selectedTag} onTagChange={setSelectedTag} />
+          <RatingFilter minRating={minRating} onRatingChange={setMinRating} />
+          <SortSelection sortOption={sortOption} onSortChange={setSortOption} />
+          <FavoritesToggle checked={showFavoritesOnly} onChange={setShowFavoritesOnly} />
+          <ResetFilters onReset={() => {
+            setSearchTerm("");
+            setSelectedTag(null);
+            setMinRating(0);
+            setSortOption("none");
+          }} />
+        </div>
       </div>
       <BooksList books={sortedBooks} favoriteIds={favorites} onToggleFavorite={toggleFavorite} />
     </div>
+
   );
 }
 

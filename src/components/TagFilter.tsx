@@ -18,8 +18,8 @@ export function TagFilter({ selectedTag, onTagChange }: TagFilterProps) {
     };
 
     return (
-        <div style={{ marginTop: '10px' }}>
-            <label htmlFor="tag-filter">Filter by tag: </label>
+        <div className="control-row">
+            <label htmlFor="tag-filter" className="control-label">Filter by tag: </label>
             <select id="tag-filter" value={selectedTag ?? ""}
                 onChange={handleChange}
             >

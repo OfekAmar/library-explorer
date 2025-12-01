@@ -16,7 +16,7 @@ export function BooksList({ books, favoriteIds, onToggleFavorite }: BooksListPro
     }
 
     return (
-        <ul>
+        <ul className="books-list">
             {books.map((book) => (
                 <BookItem key={book.id}
                     book={book}

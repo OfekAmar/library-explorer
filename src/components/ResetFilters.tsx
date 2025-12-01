@@ -6,8 +6,8 @@ interface ResetFiltersProps {
 
 export function ResetFilters({ onReset }: ResetFiltersProps) {
     return (
-        <div style={{ marginTop: '10px' }}>
-            <button onClick={onReset}> Clear </button>
+        <div className="control-row control-row--full control-row--right">
+            <button type="button" onClick={onReset} className="btn btn-secondary"> Clear </button>
         </div>
     )
 }

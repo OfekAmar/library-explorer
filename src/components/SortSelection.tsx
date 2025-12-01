@@ -15,8 +15,8 @@ export function SortSelection({ sortOption, onSortChange }: SelectionProps) {
     }
 
     return (
-        <div style={{ marginTop: '10px' }}>
-            <label htmlFor='sort'>Sort by: </label>
+        <div className="control-row">
+            <label htmlFor='sort' className="control-label">Sort by: </label>
             <select id='sort' value={sortOption} onChange={handleChange}>
                 <option value='none'>None</option>
                 <option value='title-asc'>Title (A-Z)</option>

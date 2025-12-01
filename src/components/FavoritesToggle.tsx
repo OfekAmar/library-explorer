@@ -11,11 +11,11 @@ export function FavoritesToggle({ checked, onChange }: FavoritesToggleProps) {
         onChange(event.target.checked);
     }
     return (
-        <div style={{ marginTop: '10px' }}>
-            <label>
+        <div className="control-row">
+            <label className="checkbox-label">
                 <input type="checkbox" id="favoritesOnly" checked={checked} onChange={handleChange} />
                 {" "}
-                show Favorites only
+                <span>Show favorites only</span>
             </label>
         </div>
     )
