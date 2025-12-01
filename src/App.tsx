@@ -1,12 +1,15 @@
-import React, { use } from 'react';
+import React from 'react';
 import { useState, useEffect } from "react";
-import logo from './logo.svg';
 import './App.css';
-import { Book, Tag } from "./types";
+import { Book, Tag, SortOption } from "./types";
+import { SearchBar } from './components/SearchBar';
+import { TagFilter } from './components/TagFilter';
+import { RatingFilter } from './components/RatingFilter';
+import { SortSelection } from './components/SortSelection';
+import { FavoritesToggle } from './components/FavoritesToggle';
+import { ResetFilters } from './components/ResetFilters';
 
 function App() {
-
-  type SortOption = 'none' | 'title-asc' | 'title-desc' | 'rating-asc' | 'rating-desc';
 
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -56,7 +59,6 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
-    console.log("כתיבה ל-localStorage:", favorites);
   }, [favorites]);
 
   if (loading) {
@@ -114,64 +116,17 @@ function App() {
     <div>
       <h1>  Library Explorer </h1>
       <div>
-        <label htmlFor='search'> Search by title or author: </label>
-        <input id='search' type='text' value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)}></input>
-        <div style={{ marginTop: '10px' }}>
-          <label htmlFor="tag-filter">Filter by tag: </label>
-          <select id="tag-filter" value={selectedTag ?? ""}
-            onChange={(event) => {
-              const value = event.target.value;
-              setSelectedTag(value === "" ? null : (value as Tag));
-            }}
-          >
-            <option value="">All</option>
-            <option value="tech">Tech</option>
-            <option value="non-fiction">Non-Fiction</option>
-            <option value="fiction">Fiction</option>
-            <option value="fantasy">Fantasy</option>
-            <option value="history">History</option>
-            <option value="self-help">Self-Help</option>
-            <option value="science">Science</option>
-          </select>
-        </div>
-        <div style={{ marginTop: '10px' }}>
-          <label htmlFor='rating-filter'>Filter by minimum rating: </label>
-          <input id='rating-filter' type='number' min={0} max={5} step={0.5} value={minRating}
-            onChange={(event) => {
-              const value = Number(event.target.value);
-              setMinRating(value);
-            }}></input>
-        </div>
-        <div style={{ marginTop: '10px' }}>
-          <label htmlFor='sort'>Sort by: </label>
-          <select id='sort' value={sortOption} onChange={(event) => {
-            setSortOption(event.target.value as SortOption)
-          }}
-          >
-            <option value='none'>None</option>
-            <option value='title-asc'>Title (A-Z)</option>
-            <option value='title-desc'>Title (Z-A)</option>
-            <option value='rating-asc'>Rating (Low to High)</option>
-            <option value='rating-desc'>Rating (High to Low)</option>
-          </select>
-        </div>
-        <div style={{ marginTop: '10px' }}>
-          <label>
-            <input type="checkbox" id="favoritesOnly" checked={showFavoritesOnly} onChange={(event) => {
-              setShowFavoritesOnly(event.target.checked);
-            }} />
-            {" "}
-            show Favorites only
-          </label>
-        </div>
-        <div style={{ marginTop: '10px' }}>
-          <button onClick={() => {
-            setSearchTerm("");
-            setSelectedTag(null);
-            setMinRating(0);
-            setSortOption('none');
-          }}> Clear </button>
-        </div>
+        <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+        <TagFilter selectedTag={selectedTag} onTagChange={setSelectedTag} />
+        <RatingFilter minRating={minRating} onRatingChange={setMinRating} />
+        <SortSelection sortOption={sortOption} onSortChange={setSortOption} />
+        <FavoritesToggle checked={showFavoritesOnly} onChange={setShowFavoritesOnly} />
+        <ResetFilters onReset={() => {
+          setSearchTerm("");
+          setSelectedTag(null);
+          setMinRating(0);
+          setSortOption("none");
+        }} />
       </div>
       <ul>
         {sortedBooks.map((book) => (

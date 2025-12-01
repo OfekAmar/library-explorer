@@ -15,3 +15,10 @@ export interface Book {
     tags: Tag[];
     description: string;
 }
+// Added type for sorting options
+export type SortOption =
+    | 'none'
+    | 'title-asc'
+    | 'title-desc'
+    | 'rating-asc'
+    | 'rating-desc';
