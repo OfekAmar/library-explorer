@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import { Book, Tag, SortOption } from "./types";
 import { SearchBar } from './components/SearchBar';
@@ -8,6 +7,7 @@ import { RatingFilter } from './components/RatingFilter';
 import { SortSelection } from './components/SortSelection';
 import { FavoritesToggle } from './components/FavoritesToggle';
 import { ResetFilters } from './components/ResetFilters';
+import { BooksList } from './components/BooksList';
 
 function App() {
 
@@ -34,8 +34,6 @@ function App() {
     }
   });
 
-
-
   useEffect(() => {
     setLoading(true);
     fetch("/books.json")
@@ -60,14 +58,6 @@ function App() {
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
   }, [favorites]);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p style={{ color: 'red' }}> Error : {error}  </p>;
-  }
 
   const filteredBooks = books.filter((book) => {
     const lowercaseSearchTerm = searchTerm.toLowerCase();
@@ -112,6 +102,14 @@ function App() {
     })
   }
 
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p style={{ color: 'red' }}> Error : {error}  </p>;
+  }
+  
   return (
     <div>
       <h1>  Library Explorer </h1>
@@ -128,16 +126,7 @@ function App() {
           setSortOption("none");
         }} />
       </div>
-      <ul>
-        {sortedBooks.map((book) => (
-          <li key={book.id}>
-            <button type="button" onClick={() => toggleFavorite(book.id)}>
-              {favorites.includes(book.id) ? "★" : "☆"}
-            </button>{' '}
-            <strong>{book.title}</strong> - {book.author}
-          </li>
-        ))}
-      </ul>
+      <BooksList books={sortedBooks} favoriteIds={favorites} onToggleFavorite={toggleFavorite} />
     </div>
   );
 }
