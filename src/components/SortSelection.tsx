@@ -7,8 +7,12 @@ interface SelectionProps {
     onSortChange: (option: SortOption) => void;
 }
 
+// SortSelection Component: a dropdown to select sorting option for the book list
+// sortOption + onSortChange come from parent component
 export function SortSelection({ sortOption, onSortChange }: SelectionProps) {
 
+    // Handle change in selection
+    // converts the selected string value into a SortOption type and sends it back to the parent component
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value as SortOption;
         onSortChange(value);

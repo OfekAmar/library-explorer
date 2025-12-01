@@ -7,6 +7,9 @@ interface BookItemProps {
     onToggleFavorite: (bookId: string) => void;
 }
 
+// BookItem Component: display a single book in a card layout, show title, author, year, rating, tags, and description
+// allow toggling favorite status via the star button
+
 export function BookItem({ book, isFavorite, onToggleFavorite }: BookItemProps) {
     return (
         <li className="book-card">

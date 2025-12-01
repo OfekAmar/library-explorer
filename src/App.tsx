@@ -12,14 +12,15 @@ import logo from "./assets/images/logo.png";
 
 function App() {
 
-  const [books, setBooks] = useState<Book[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [books, setBooks] = useState<Book[]>([]); // list of all books loaded from books.json
+  const [loading, setLoading] = useState<boolean>(true); // loading and error states for the data fetch
   const [error, setError] = useState<string>("");
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
-  const [minRating, setMinRating] = useState(0)
-  const [sortOption, setSortOption] = useState<SortOption>('none');
-  const [showFavoritesOnly, setShowFavoritesOnly] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>(""); // search term for filtering by title or author
+  const [selectedTag, setSelectedTag] = useState<Tag | null>(null); // currently selected tag filter (or null when no tag is selected)
+  const [minRating, setMinRating] = useState(0) // minimum rating filter (0–5)
+  const [sortOption, setSortOption] = useState<SortOption>('none'); // current sort option
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState<boolean>(false); // whether to show only favorite books
+  // list of favorite book IDs, initialized from localStorage
   const [favorites, setFavorites] = useState<string[]>(() => {
     const stored = localStorage.getItem("favorites");
     if (!stored) return [];
@@ -35,6 +36,8 @@ function App() {
     }
   });
 
+  //fetch the books data from /books.json when the component mounts.
+  //handles loading and error states.
   useEffect(() => {
     setLoading(true);
     fetch("/books.json")
@@ -52,6 +55,7 @@ function App() {
         setError(err.message);
       })
       .finally(() => {
+        // always stop the loading state, regardless of success/failure
         setLoading(false);
       });
   }, []);
@@ -60,6 +64,7 @@ function App() {
     localStorage.setItem("favorites", JSON.stringify(favorites));
   }, [favorites]);
 
+  //apply search, tag, rating and favorites filters to the books list.
   const filteredBooks = books.filter((book) => {
     const lowercaseSearchTerm = searchTerm.toLowerCase();
     const titleRes = book.title.toLowerCase().includes(lowercaseSearchTerm);
@@ -72,8 +77,9 @@ function App() {
     return searchRes && matchesTag && matchesRating && matchesFavorites;
   })
 
-  // Sorting - making a copy of filteredBooks in order to not change the original array
+  // sorting - making a copy of filteredBooks in order to not change the original array
   // and then sorting based on the selected sort option
+  // creating a copy to avoid changing the original array
   const sortedBooks = [...filteredBooks].sort((a, b) => {
     switch (sortOption) {
       case 'title-asc':
@@ -91,6 +97,7 @@ function App() {
 
   });
 
+  //toggles a book's favorite status by adding/removing its ID from the favorites list.
   const toggleFavorite = (bookId: string) => {
     setFavorites((prev) => {
       if (prev.includes(bookId)) {
@@ -102,7 +109,7 @@ function App() {
       }
     })
   }
-
+  // render loading, error UI
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -126,6 +133,7 @@ function App() {
           <RatingFilter minRating={minRating} onRatingChange={setMinRating} />
           <SortSelection sortOption={sortOption} onSortChange={setSortOption} />
           <FavoritesToggle checked={showFavoritesOnly} onChange={setShowFavoritesOnly} />
+          {/* Reset all filters (except favorites state) */}
           <ResetFilters onReset={() => {
             setSearchTerm("");
             setSelectedTag(null);
@@ -134,6 +142,7 @@ function App() {
           }} />
         </div>
       </div>
+      {/* Render the final list of books after filtering and sorting */}
       <BooksList books={sortedBooks} favoriteIds={favorites} onToggleFavorite={toggleFavorite} />
     </div>
 

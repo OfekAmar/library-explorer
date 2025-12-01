@@ -4,9 +4,13 @@ interface SearchBarProps {
     searchTerm: string;
     onSearchChange: (value: string) => void;
 }
+
+// SearchBar Component: an input field to search books by title or author
+// searchTerm + onSearchChange come from parent component
 export function SearchBar({ searchTerm, onSearchChange }: SearchBarProps) {
     return (
         <div className="search-bar">
+            {/* Search input: updates searchTerm in parent component */}
             <input
                 type="text"
                 className="search-bar-input"

@@ -42,7 +42,6 @@ body {
 }
 
 /* Search  */
-
 .search-section {
   margin-bottom: 20px;
   display: flex;
@@ -118,7 +117,6 @@ body {
 
 
 /* filters */
-
 .filters-section {
   display: flex;
   justify-content: center;
@@ -194,7 +192,6 @@ body {
 
 
 /* buttons */
-
 .btn {
   display: inline-flex;
   align-items: center;
@@ -224,7 +221,6 @@ body {
 }
 
 /* checkbox */
-
 .checkbox-label {
   display: inline-flex;
   align-items: center;
@@ -234,7 +230,6 @@ body {
 }
 
 /* books list */
-
 .books-list {
   list-style: none;
   padding: 0;
@@ -245,7 +240,6 @@ body {
 }
 
 /* large screens – two columns */
-
 @media (min-width: 768px) {
   .books-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -253,7 +247,6 @@ body {
 }
 
 /* book card */
-
 .book-card {
   background: #ffffff;
   border-radius: 12px;
@@ -317,7 +310,6 @@ body {
 }
 
 /* favorite button */
-
 .favorite-button {
   border: none;
   background: transparent;
@@ -338,7 +330,6 @@ body {
 }
 
 /* empty state */
-
 .empty-state {
   text-align: center;
   color: #374151;
