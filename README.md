@@ -28,8 +28,6 @@ and marking favorite books.
 - Split into small, focused components (SearchBar, Filters, BookItem, etc.).
 - Strong typing using `Book`, `Tag`, and `SortOption` interfaces.
 - Favorites stored via `localStorage` with lazy initialization.
-- No external UI libraries (per assignment requirements).
-
 ---
 
 ## Running the App
@@ -42,6 +40,6 @@ Open: http://localhost:3000
 ---
 
 ## Author
-Developed by Ofek
-React + TypeScript enthusiast
+- Developed by Ofek
+- React + TypeScript enthusiast
 ---
